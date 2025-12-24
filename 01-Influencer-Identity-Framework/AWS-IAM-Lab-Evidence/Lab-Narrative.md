@@ -10,6 +10,8 @@ Upon initial audit, I identified three critical identities with excessive permis
 2. **The Video Editor (Human/Contractor):** Full `AdministratorAccess`.
 3. **The Sponsorship Bot (Non-Human/API):** Full `AdministratorAccess`.
 
+<img width="1590" height="687" alt="image" src="https://github.com/user-attachments/assets/8dc3914f-97df-4fc2-bd21-31f013b56fef" />
+
 **Risk Identified:** A single compromised credential or session hijack of the Freelance Editor would allow an attacker to delete the entire business's digital infrastructure and backup buckets.
 
 ## ⚙️ The Action Plan (Remediation)
@@ -22,6 +24,7 @@ I mapped out the "Minimum Viable Access" for each role.
 ### Phase 2: Implementation of Scoped Policies
 I developed custom JSON policies to replace the AWS-managed `AdministratorAccess`. 
 
+<img width="1536" height="450" alt="image" src="https://github.com/user-attachments/assets/47ea4a9d-253b-4e0b-b73a-0329f374d415" />
 
 
 Key technical controls implemented:
@@ -33,6 +36,7 @@ Key technical controls implemented:
 I utilized the **AWS IAM Policy Simulator** to verify that the controls were working as intended.
 - **Test 1 (Upload):** Result: **SUCCESS**
 - **Test 2 (Delete):** Result: **EXPLICIT DENY**
+<img width="1860" height="502" alt="image" src="https://github.com/user-attachments/assets/6705a31d-b461-4def-8211-1a6e13e7727f" />
 
 ## 📊 Business Outcome
 By implementing these GRC-driven technical controls, I achieved:
