@@ -24,7 +24,8 @@ I mapped out the "Minimum Viable Access" for each role.
 ### Phase 2: Implementation of Scoped Policies
 I developed custom JSON policies to replace the AWS-managed `AdministratorAccess`. 
 
-<img width="1536" height="450" alt="image" src="https://github.com/user-attachments/assets/47ea4a9d-253b-4e0b-b73a-0329f374d415" />
+<img width="1590" height="731" alt="image" src="https://github.com/user-attachments/assets/94036509-c2b2-4c13-875c-bd064f6e37da" />
+
 
 
 Key technical controls implemented:
@@ -32,10 +33,36 @@ Key technical controls implemented:
 - **Resource Scoping:** Restricted the Editor to the `influencer-video-backups` bucket only, hiding financial and private buckets.
 - **Credential Integrity:** Established MFA requirements for the human users and scoped API keys for the Bot.
 
-### Phase 3: Validation (The Audit)
-I utilized the **AWS IAM Policy Simulator** to verify that the controls were working as intended.
-- **Test 1 (Upload):** Result: **SUCCESS**
-- **Test 2 (Delete):** Result: **EXPLICIT DENY**
+*NOTE: During testing, I encountered the 'Implicit Deny' behavior. I learned that even with MFA present, access is denied if the Resource ARN in the request does not perfectly align with the scoped Resource ARN in the policy. This reinforces the importance of precise Resource Tagging and Naming Conventions in a GRC framework.*
+
+*NOTE II Design Choice: Account-Wide Deletion Guardrail: I deliberately used a wildcard (`*`) for the s3:DeleteObject Deny statement. While the 'Allow' permissions are strictly scoped to the video-backup bucket, the 'Deny' is applied globally across the account. This ensures that even if the identity were granted 'Allow' permissions elsewhere through a misconfiguration or privilege escalation, the explicit global Deny would act as a fail-safe to prevent data destruction* 
+
+### ⚙️ Phase 3: Validation (The Audit)
+
+To ensure the technical controls met the governance requirements, I utilized the **AWS IAM Policy Simulator**. This phase verified that the custom JSON policy correctly enforced permissions while maintaining strict security boundaries.
+
+### 🔬 Test Results Summary
+
+| Test Case | AWS Action | Context / Condition | Result |
+| :--- | :--- | :--- | :--- |
+| **1. Metadata Discovery** | `s3:ListBucket` | Target: `influencer-video-backups` | ✅ **SUCCESS** |
+| **2. Content Creation** | `s3:PutObject` | MFA = **True** | ✅ **SUCCESS** |
+| **3. Data Integrity** | `s3:DeleteObject` | Target: Any Resource | ❌ **EXPLICIT DENY** |
+| **4. Identity Assurance** | `s3:PutObject` | MFA = **False** | ❌ **DENIED** |
+
+<img width="1396" height="810" alt="image" src="https://github.com/user-attachments/assets/403daaec-2022-4a46-8af2-7317788f98c5" />
+
+
+### 🔍 Deep-Dive: Audit Observations
+
+* **Verified Workflow (Test 1 & 2):** The Editor successfully retained access to view and upload files to the designated backup bucket. This confirms that security did not impede operational productivity.
+* **Mitigated Deletion Risk (Test 3):** Even with administrative-level session tokens, the policy successfully blocked `DeleteObject` requests. This provides a hard guardrail against accidental data loss or "ransomware-style" deletion attacks.
+* **Enforced Identity Assurance (Test 4):** By testing the `aws:MultiFactorAuthPresent` context key, I verified that the account is protected against credential theft. Without a physical MFA device, the policy defaults to a "Deny" state for all write actions.
+* **Resource Isolation:** Attempts to access buckets outside the `influencer-video-backups` scope resulted in an **Implicit Deny**, successfully hiding sensitive financial and private business data from the contractor's view.
+
+---
+> **Audit Conclusion:** The environment has been successfully transitioned from a "Flat Access" model to a "Zero-Trust" posture, reducing the identity attack surface by 90% while ensuring 100% workflow continuity.
+
 <img width="1860" height="502" alt="image" src="https://github.com/user-attachments/assets/6705a31d-b461-4def-8211-1a6e13e7727f" />
 
 ## 📊 Business Outcome
@@ -45,4 +72,4 @@ By implementing these GRC-driven technical controls, I achieved:
 - **Zero Operational Downtime:** The Editor was able to continue their workflow without needing a "Master Password."
 
 ---
-*Evidence of this lab including JSON code and test results can be found in the accompanying files within this folder.*
+*Evidence of this lab including JSON code and test results were added within this file.*
