@@ -9,6 +9,8 @@ Upon initial audit, I identified three critical identities with excessive permis
 2. **The Video Editor (Human/Contractor):** Full `AdministratorAccess`.
 3. **The Sponsorship Bot (Non-Human/API):** Full `AdministratorAccess`.
 
+<img width="1602" height="607" alt="image" src="https://github.com/user-attachments/assets/79a6ad90-c2fa-4915-92fe-0231b708c49e" />
+
 **Risk Identified:** A single compromised credential or session hijack of the Freelance Editor would allow an attacker to delete the entire business's digital infrastructure and backup buckets. There was no "Blast Radius" protection.
 
 ---
@@ -23,12 +25,14 @@ I mapped out the **"Minimum Viable Access"** required for the Editor role:
 ### Phase 2: Implementation of Scoped Policies
 I developed a custom JSON policy to replace the AWS-managed `AdministratorAccess` for the Contractor role. 
 
+<img width="1530" height="650" alt="image" src="https://github.com/user-attachments/assets/7c2d97b6-1020-4163-a56b-68a250044bbb" />
+
 **Key Technical Controls Implemented:**
 - **Resource Scoping:** Restricted the Editor to the `influencer-video-backups` bucket only, hiding financial and private buckets.
 - **Credential Integrity:** Established **MFA requirements** for write actions via a policy `Condition` block.
 - **Global Guardrail:** Applied an account-wide `Deny` on `s3:DeleteObject` to act as a fail-safe.
 
-> ### Engineering Insights
+> ### Learnings & Insights
 > 
 > **1. Implicit Deny Behavior:** During testing, I encountered "Implicit Deny" behavior. I learned that even with MFA present, access is denied if the Resource ARN in the request does not perfectly align with the scoped Resource ARN in the policy. This reinforces the importance of precise Resource Tagging and Naming Conventions.
 >
@@ -44,10 +48,19 @@ To ensure the technical controls met the governance requirements, I utilized the
 
 | Test Case | AWS Action | Context / Condition | Result |
 | :--- | :--- | :--- | :--- |
-| **1. Metadata Discovery** | `s3:ListBucket` | Target: `influencer-video-backups` | ✅ **SUCCESS** |
+| **1. Metadata Discovery** | `s3:ListBucket` | Target: `private-financial-records` | ❌ **DENIED** |
 | **2. Content Creation** | `s3:PutObject` | MFA = **True** | ✅ **SUCCESS** |
 | **3. Data Integrity** | `s3:DeleteObject` | Target: **Global (*)** | ❌ **EXPLICIT DENY** |
 | **4. Identity Assurance** | `s3:PutObject` | MFA = **False** | ❌ **DENIED** |
+
+**1:**
+<img width="1392" height="566" alt="image" src="https://github.com/user-attachments/assets/0c91bea6-b67c-4e8e-bfee-ea82188bb87a" />
+**2:**
+<img width="1397" height="532" alt="image" src="https://github.com/user-attachments/assets/46c71504-5451-49cc-b929-80cd33214400" />
+**3:**
+<img width="1395" height="787" alt="image" src="https://github.com/user-attachments/assets/68bffabf-e134-497e-a472-ca6c21a25930" />
+**4:**
+<img width="1395" height="637" alt="image" src="https://github.com/user-attachments/assets/5f96c354-9189-42fe-b87b-4eeea9850e22" />
 
 ---
 
@@ -62,7 +75,7 @@ To ensure the technical controls met the governance requirements, I utilized the
 
 ## Business Outcome
 By implementing these GRC-driven technical controls, I achieved:
-- **90% Reduction** in the identity attack surface.
+- **90% Reduction** in the identity attack surface. *(residual risks, even if minimized, will always exist)*
 - **Compliance** with **NIST CSF PR.AC-4** (Least Privilege).
 - **Operational Resilience:** The Editor can continue their workflow without needing a "Master Password," and the business owner has verified data protection.
 
