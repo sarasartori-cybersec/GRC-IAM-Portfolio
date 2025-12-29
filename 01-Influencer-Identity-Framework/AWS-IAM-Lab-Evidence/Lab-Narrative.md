@@ -2,7 +2,7 @@
 # 🔬 Lab Narrative: Remediating "Identity Sprawl" in a Cloud-Native Creative Business
 
 ## 📌 Executive Summary
-In this lab, I simulated a high-risk security baseline for a growing Creator business hosted on AWS. The objective was to transition the environment from a "Flat Access" model (where every identity held full administrative rights) to a **Zero-Trust / Least-Privilege** model using Custom IAM Policies.
+In this lab, I simulated a high-risk security baseline for a digital creator business hosted on AWS. The objective was to transition the environment from a "Flat Access" model (where every identity held full administrative rights) to a **Zero-Trust / Least-Privilege** model using custom IAM Policies. Thes scenario represents a scaled, professionalized creator business where speed, automation, and distributed teams have made direct platform access operationally necessary.
 
 ## 🛠️ The Challenge: "Admin by Default"
 Upon initial audit, I identified three critical identities with excessive permissions:
