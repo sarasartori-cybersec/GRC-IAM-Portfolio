@@ -3,6 +3,9 @@
 ## The Vision
 In the modern digital economy, **Identity is the new perimeter.** High-growth creators and digital-first businesses are currently operating with enterprise-level revenue but "startup-level" security. This project is a commitment to bridging that gap by applying rigorous **Enterprise GRC and IAM standards** to the agile, automated world of the Creator Economy.
 
+## Governance Context
+This lab simulates a real-world IAM governance scenario where rapid growth, contractor onboarding, and automation replace formal access reviews. This is a common risk pattern in digital-first businesses.
+
 ## Core Principles
 
 ### 1. Identity Over Infrastructure
