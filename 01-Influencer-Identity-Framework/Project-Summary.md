@@ -9,7 +9,7 @@ This lab simulates a real-world IAM governance scenario where rapid growth, cont
 ## Core Principles
 
 ### 1. Identity Over Infrastructure
-Traditional security focuses on firewalls; modern security focuses on **Identities**. Every human staff member and every "Non-Human" AI agent must have a verified, scoped, and audited identity. Zero-trust is a fundamental principle to secure access. 
+Traditionally, security focuses on firewalls rules for perimeter protection; modern security focuses on **Identities**. Every human staff member and every "Non-Human" AI agent must have a verified, scoped, and audited identity. Zero-trust is a fundamental principle to secure access. 
 
 ### 2. Least Privilege by Default
 Permissions are a liability, not a convenience. Every integration, from a video editor to a sponsorship bot, should operate on the absolute minimum access required to perform its function. If an account doesn't need "Delete" permission, it should not be assign it. 
