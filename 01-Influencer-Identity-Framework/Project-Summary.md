@@ -25,5 +25,5 @@ My approach follows a four-stage lifecycle:
 4. **Governance:** Continuous monitoring and policy enforcement.
 
 ## My Commitment
-This repository is a living body of work. It represents a promise to stay ahead of the threat landscape by protecting digital creators from the existing anf future identity and AI threats. 
+This repository is a living body of work. It represents my commitment to stay ahead of the threat landscape by protecting digital creators from the existing and future identity and AI threats. 
 
